@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/go-redis/redis_rate/v10"
 	"github.com/redis/go-redis/v9"
+	"os"
 	"sync"
 	"testing"
 	"time"
@@ -21,8 +22,8 @@ func TestRedisLimiter_RedisWaitAllowN(t *testing.T) {
 func RrunTest(key string, wg1 *sync.WaitGroup) {
 	defer wg1.Done()
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "",
-		Password: "",
+		Addr:     os.Getenv("Redis_Addr"),
+		Password: os.Getenv("Redis_Pwd"),
 		DB:       0,
 	})
 	limiters := RedisLimiter{Limiter: *redis_rate.NewLimiter(rdb)}
