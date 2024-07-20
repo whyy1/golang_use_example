@@ -11,7 +11,7 @@ type RedisLimiter struct {
 }
 
 func (limiter *RedisLimiter) RedisWaitAllowN(ctx context.Context, key string, limit redis_rate.Limit, n int) (bool, error) {
-	//TODO 动态修改限速器参数
+	//如果同一时刻对同一个key传入不同的速率，会按照各自速率计算，并推进令牌桶的时间戳tat
 	res, err := limiter.AllowN(ctx, key, limit, n)
 	if err != nil {
 		return false, err
