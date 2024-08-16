@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Implementation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #data-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        #clickable {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        #clickable:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <ul id="data-list">
+        <li id="messageStr"></li>
+    </ul>
+    <div id="clickable">点我</div>
+</div>
+
+<script>
+    // 获取元素
+    const messageElement = document.getElementById('messageStr');
+    const clickableElement = document.getElementById('clickable');
+
+    // 定义函数获取数据并更新
+    function getData() {
+        const sseSource = new EventSource('http://localhost:8080/ccc/stream');
+
+        sseSource.addEventListener('message', (event) => {
+            console.log(event.data);
+            messageElement.textContent += event.data;
+        });
+
+        sseSource.addEventListener('end', () => {
+            sseSource.close();
+        });
+    }
+
+    // 绑定点击事件
+    clickableElement.addEventListener('click', () => {
+        getData();
+    });
+</script>
+</body>
+</html>
